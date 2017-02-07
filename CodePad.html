@@ -1,0 +1,142 @@
+<html>
+    <head>
+    
+        <title> CodePad </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+          <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        
+        <style type="text/css">
+            body{
+           
+                font-family:sans-serif;
+                padding: 0;
+                margin: 0;
+                
+            }
+            #header{
+                width: 100%;
+                height: 55px;
+                background-color:antiquewhite;  
+            }
+            #logo{
+                font-weight: bolder;
+                position: relative;
+                top: 14px;
+                left: 10px;
+                color:darkorange;
+                font-size:25px;
+          
+            }
+            #buttonContainer{
+               
+                width:250px;
+                margin: 0 auto;
+            }
+            .eachButton{
+                position:relative;
+                bottom: 17px;
+                float:left;
+                border: 1px solid darkorange;
+                padding: 5px;
+                border-right:none; 
+                color:brown;
+                font-size: 15px;
+            }
+            #html{
+                
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+            #output{
+                border-right: 1px solid darkorange;
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
+            .selected
+            {
+                background-color:darksalmon;
+            }
+            .buttonHighlighted{
+                background-color: darkorange;
+            }
+            
+            textarea {
+            
+                resize: none;
+             
+                border-color:darksalmon;
+            }
+            .container{
+                width: 50%;
+                border-top:none;
+                border-left:none;
+                border-bottom: none;
+           
+            }
+            iframe{
+                border: none;
+            }
+            .hidden{
+                display:none;
+            }
+            #codeContainer{
+           
+                float:left;
+            }
+       
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo" >CodePad</div>
+            <div id="buttonContainer">
+                <div class="eachButton selected" id="html">HTML</div>
+                <div class="eachButton" id="css">CSS</div>
+                <div class="eachButton" id="javascript">JavaScript</div>
+                <div class="eachButton selected" id="output">Output</div>
+            </div>    
+        </div>
+       <div id="codeContainer">
+            <textarea id="htmlContainer" class="container"><p id="text">Hello World!</p></textarea>
+             
+             <textarea id="cssContainer" class="container hidden">p {color:darkorange;}</textarea>
+             <textarea id="javascriptContainer" class="container hidden">document.getElementById("text").innerHTML = "Welcome to CodePad"</textarea>
+            <iframe id="outputContainer" class="container"></iframe>
+        </div>
+        
+        <script type = "text/javascript">
+            function onloadUpdate(){
+                $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssContainer").val()+ "</style><body>" + $("#htmlContainer").val()+ "</body></head></html>");
+                
+                document.getElementById("outputContainer").contentWindow.eval($("#javascriptContainer").val());
+            
+            }
+            $(".eachButton").hover(function(){
+                 $(this).addClass("buttonHighlighted");
+            },function(){
+                $(this).removeClass("buttonHighlighted");
+            });
+            $(".eachButton").click(function(){
+                $(this).toggleClass("selected");
+                $(this).removeClass("buttonHighlighted");
+                var containerId = $(this).attr("id") + "Container";
+                $("#" +containerId).toggleClass("hidden");
+                var activeContainers = 4 - $('.hidden').length;
+                $(".container").width(($(window).width()/activeContainers)-10);
+              
+            });
+              $(".container").height($(window).height() - $("#header").height()-15);
+              $(".container").width(($(window).width()/2)-10);
+            onloadUpdate();
+             
+              $("textarea").on('change keyup paste', function() {
+              $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssContainer").val()+ "</style><body>" + $("#htmlContainer").val()+ "</body></head></html>");
+            document.getElementById("outputContainer").contentWindow.eval($("#javascriptContainer").val());
+         
+ });
+
+        </script>
+       
+    </body>
+</html>
